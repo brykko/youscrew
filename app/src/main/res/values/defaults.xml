@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="default_num_tetrodes">14</integer>
+    <integer name="default_thread_dir">1</integer>
+    <integer name="default_microns_per_turn">320</integer>
+    <integer name="default_tt_independent">1</integer>
+
+</resources>

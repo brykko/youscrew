@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_show_summary"
+        android:title="Show summary" />
+    <item
+        android:id="@+id/action_edit_rat"
+        android:title="Edit rat details" />
+    <item
+        android:id="@+id/action_delete_rat_sessions"
+        android:title="Delete all turning sessions" />
+    <item
+        android:id="@+id/action_delete_rat"
+        android:title="Delete rat" />
+    <item
+        android:title="Export turning log"
+        android:id="@+id/action_export_log" />
+</menu>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="colorBorder">#999999</color>
+    <color name="colorTTListItemDefault">#FFFFFF</color>
+
+    <color name="colorPreTurn">#AA0000</color>
+    <color name="colorPostTurn">#AA0000</color>
+    <color name="colorSessionListItemTurned">#224433</color>
+
+    <color name="colorInUse">#307030</color>
+    <!--<color name="colorNotInUse">#000000</color>-->
+    <color name="colorSingleConstraint">#FF0000</color>
+    <color name="colorMandatory">#5B90C0</color>
+    <color name="colorMandatoryYes">#AA2244</color>
+    <color name="colorTagGroupNew">#8080B0</color>
+
+    <color name="colorTag">#00CF00</color>
+    <color name="colorDepth">#C09050</color>
+    <color name="colorTurns">#AAAAFF</color>
+
+    <color name="colorTtNormal">#555555</color>
+    <color name="colorTtReference">#5041C2</color>
+
+    <color name="colorOk">#99DD99</color>
+    <color name="colorCancel">#DD9999</color>
+
+</resources>

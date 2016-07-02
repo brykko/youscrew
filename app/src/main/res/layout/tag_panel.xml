@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Layout for a single tag panel, including the title and listvew-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="false"
+    android:clickable="false"
+    android:padding="5dip">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16dip"
+        android:text="tag group"
+        android:layout_gravity="center"
+        android:id = "@+id/tag_panel_title"
+        android:focusable="false"
+        android:clickable="false"
+        android:padding = "2dip"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="10dip"
+        android:textStyle="italic"
+        android:text="tag hint"
+        android:id = "@+id/tag_panel_hint"
+        android:focusable="false"
+        android:clickable="false"
+        android:padding = "2dip"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="10dip"
+        android:text="in-use state"
+        android:id="@+id/tag_panel_in_use"
+        android:padding="2dip"
+        android:focusable="false"
+        android:clickable="false"
+        android:textStyle="bold"
+        android:textColor="@color/colorInUse"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="10dip"
+        android:text="mandatory"
+        android:id="@+id/tag_panel_mandatory"
+        android:padding="2dip"
+        android:focusable="false"
+        android:clickable="false"
+        android:textStyle="bold"
+        android:textColor="@color/colorMandatory" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="10dip"
+        android:text="single constraint"
+        android:id="@+id/tag_panel_single_constraint"
+        android:padding="2dip"
+        android:focusable="false"
+        android:clickable="false"
+        android:textStyle="bold"
+        android:textColor="@color/colorSingleConstraint"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@null"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:id="@+id/tag_panel_listview"
+
+        />
+
+</LinearLayout>

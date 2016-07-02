@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="Edit comment"
+        android:id="@+id/action_edit_comment" />
+    <item
+        android:title="Tag PRE"
+        android:id="@+id/action_edit_tags_pre" />
+    <item
+        android:title="Tag POST"
+        android:id="@+id/action_edit_tags_post" />
+    <item
+        android:title="Undo turning"
+        android:id="@+id/action_undo_turn" />
+    <item
+        android:title="Edit tetrode tag"
+        android:id="@+id/action_edit_tetrode_tag" />
+</menu>

@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.brick.youscrew.TurnActivity">
+    <item
+        android:id="@+id/action_turn_resetintitialangle"
+        android:title="Reset initial angle"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_turn_undo"
+        android:title="Undo turning"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_turn_edit_pre_tags"
+        android:title="Edit pre-turn tags"
+        app:showAsAction="never" />
+
+</menu>

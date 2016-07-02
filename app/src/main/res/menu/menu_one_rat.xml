@@ -1,0 +1,32 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".OneRatActivity">
+    <item
+        android:id="@+id/action_new_session"
+        android:title="+ New session"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_show_summary"
+        android:title="Show summary"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_edit_rat"
+        android:title="Edit rat details"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_delete_rat_sessions"
+        android:title="Delete all turning sessions" />
+    <item
+        android:id="@+id/action_delete_rat"
+        android:title="Delete rat"
+        app:showAsAction="never" />
+    <item
+        android:title="Export turning log"
+        android:id="@+id/action_export_log"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+</menu>

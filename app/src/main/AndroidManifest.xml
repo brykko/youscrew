@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.brick.youscrew">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name="com.dropbox.client2.android.AuthActivity"
+            android:configChanges="orientation|keyboard"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <data android:scheme="db-h3szcn1uoqs1s2v" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".TurnActivity"
+            android:label="@string/title_activity_turn"
+            android:parentActivityName=".SessionActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".SessionActivity" />
+
+        <activity
+            android:name=".RatActivity"
+            android:label="@string/title_activity_rat"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".OneRatActivity"
+            android:label="@string/title_activity_one_rat"
+            android:parentActivityName=".RatActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.brick.youscrew.RatActivity" />
+        </activity>
+        <activity
+            android:name=".SessionActivity"
+            android:label="@string/title_activity_tt"
+            android:parentActivityName=".OneRatActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.brick.youscrew.OneRatActivity" />
+        </activity>
+        <activity
+            android:name=".TagActivity"
+            android:label="@string/title_activity_tag"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".TagSetupActivity"
+            android:label="@string/title_activity_tag_setup"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".RatSummaryActivity"
+            android:label="@string/title_activity_rat_summary"></activity>
+    </application>
+
+</manifest>

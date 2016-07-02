@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_tag_group_new_tag"
+        android:title="Add new tag" />
+    <item
+        android:id="@+id/action_tag_group_edit"
+        android:title="Edit group properties" />
+    <item
+        android:id="@+id/action_tag_group_delete"
+        android:title="Delete group" />
+</menu>

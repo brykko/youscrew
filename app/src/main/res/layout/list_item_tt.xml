@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- List item contains TT name, other info, then an image of the current angle-->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="45dip"
+    android:padding="3dip"
+    android:id="@+id/tt_list_item">
+
+    <!--<ImageView-->
+    <!--android:layout_width="30dip"-->
+    <!--android:layout_height="30dip"-->
+    <!--android:layout_marginLeft="5dip"-->
+    <!--android:layout_alignParentLeft="true"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:id="@+id/tt_index_icon" />-->
+
+        <!-- TT ICON WITH NUMBER -->
+        <com.brick.youscrew.graphics.FilledCircle
+            android:layout_width="30dip"
+            android:layout_height="30dip"
+            android:layout_marginLeft="5dip"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text="placeholder text"
+            android:id="@+id/tt_index_icon" />
+
+    <TextView
+        android:layout_width="50dip"
+        android:layout_height="match_parent"
+        android:padding="3dip"
+        android:layout_toRightOf="@+id/tt_index_icon"
+        android:text="TT TAG"
+        android:textSize="10dip"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:gravity="center"
+        android:singleLine="true"
+        android:id="@+id/tt_textview_tag"/>
+
+
+    <LinearLayout
+        android:layout_width="20dip"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/tt_textview_tag"
+        android:layout_centerVertical="true"
+        android:padding="4dip"
+        android:gravity="center_vertical"
+        android:id="@+id/tt_layout_tag_markers"
+        android:orientation="vertical">
+
+        <com.brick.youscrew.graphics.FilledCircle
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:id="@+id/marker_tag_pre"/>
+
+        <com.brick.youscrew.graphics.FilledCircle
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:id="@+id/marker_tag_post"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/tt_layout_tag_markers"
+        android:id="@+id/tt_layout_turns_depth"
+        android:orientation="vertical">
+
+        <!-- TURNS THIS SESSION -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="TURNS"
+            android:textSize="12dip"
+            android:singleLine="true"
+            android:textColor="@color/colorTurns"
+            android:textStyle="bold"
+            android:id="@+id/tt_textview_turns_this_session"/>
+
+        <!-- DEPTH -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="DEPTH"
+            android:textSize="12dip"
+            android:singleLine="true"
+            android:textColor="@color/colorDepth"
+            android:textStyle="bold"
+            android:id="@+id/tt_textview_depth"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/tt_layout_turns_depth"
+        android:textSize="10dip"
+        android:text="Comments blah blah blah... once I had a jar of fish and it was lovely"
+        android:textStyle="italic"
+        android:paddingTop="5dip"
+        android:paddingBottom="5dip"
+        android:paddingLeft="10dip"
+        android:paddingRight="10dip"
+        android:id="@+id/tt_textview_comment">
+
+    </TextView>
+
+</RelativeLayout>

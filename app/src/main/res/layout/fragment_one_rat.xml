@@ -1,0 +1,50 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dip">
+
+
+    <!-- Placeholder for a summary of the rat's status -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:dividerHeight="0dip"
+            android:id="@+id/one_rat_session_listview">
+        </ListView>
+
+    </FrameLayout>
+
+
+    <!--<LinearLayout-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_weight="3"-->
+        <!--android:id="@+id/one_rat_button_new_session">-->
+
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="5"-->
+            <!--android:textSize="30dp"-->
+            <!--android:text="+"-->
+            <!--android:gravity="center_vertical"/>-->
+
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1"-->
+            <!--android:textSize="20dp"-->
+            <!--android:text=" New turning session"-->
+            <!--android:gravity="center_vertical"/>-->
+
+    <!--</LinearLayout>-->
+
+
+</LinearLayout>

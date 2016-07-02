@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:layout_margin="20dip">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select the backup to restore: "
+        android:textSize="20dip"
+        android:padding="10dip"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:id="@+id/list_view_backup"
+        android:textSize="12dip"
+        android:padding="10dip"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="4"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom">
+
+        <Button
+            android:layout_width="200dip"
+            android:layout_height="match_parent"
+            android:text="Cancel"
+            android:textSize="18dip"
+            android:padding="10dip"
+            android:layout_margin="10dip"
+            android:layout_weight="1"
+            android:id="@+id/button_cancel"/>
+
+        <Button
+            android:layout_width="200dip"
+            android:layout_height="match_parent"
+            android:text="OK"
+            android:padding="10dip"
+            android:layout_margin="10dip"
+            android:textSize="18dip"
+            android:layout_weight="1"
+            android:id="@+id/button_ok"/>
+
+    </LinearLayout>
+
+</LinearLayout>

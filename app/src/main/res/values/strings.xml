@@ -1,0 +1,148 @@
+<resources>
+
+    <string name="app_name">YouScrew</string>
+    <string name="action_settings">Settings</string>
+    <string name="shared_prefs_file">shared prefs</string>
+
+    <string name="tag_group_new_colour">#5f8fdd</string>
+
+    <string-array name="ratnames_array">
+        <item>Amundsen</item>
+        <item>Bainbridge</item>
+        <item>Cabot</item>
+        <item>Drake</item>
+    </string-array>
+
+    <string name="title_activity_rat">Select Animal</string>
+    <string name="title_activity_one_rat">Animal Summary</string>
+    <string name="title_activity_new_rat">Add New Animal</string>
+    <string name="title_activity_tt">Select TT</string>
+    <string name="title_activity_turn">Turn</string>
+    <string name="title_activity_tag">Tags</string>
+    <string name="title_activity_launcher">LauncherActivity</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_tag_setup">Edit Tags</string>
+
+    <!-- Dialog strings -->
+    <string name="dialog_session_type">Select the time for the session</string>
+    <string name="dialog_session_type_real">Use current time</string>
+    <string name="dialog_session_type_picked">Pick time</string>
+
+    <!-- SharedPreferences field names -->
+    <string name="pref_key_db_checksum">db_checksum</string>
+    <string name="pref_key_db_last_backup_time">db_last_backup_time</string>
+
+    <string name="pref_key_edit_tags">edit_tags</string>
+    <string name="pref_key_tag_hints">tag_hints</string>
+    <string name="pref_key_tag_prompt">edit_tags</string>
+    <string name="pref_key_dial_image">dial_image</string>
+    <string name="pref_key_dial_snap">dial_snap</string>
+    <string name="pref_key_microns_per_turn">microns_per_turn</string>
+    <string name="pref_key_new_unit_dist">new_unit_dist</string>
+    <string name="pref_key_turn_ref_point">turn_ref_point</string>
+    <string name="pref_key_restore_default_tags">restore_t_tags</string>
+    <string name="pref_key_tag_suppress_first_session">suppress_tags_first_session</string>
+    <string name="pref_key_tetrode_default_references">default_reference_tetrodes</string>
+    <string name="pref_key_tetrode_default_number">default_num_tetrodes</string>
+    <string name="pref_key_db_do_backups">db_do_backups</string>
+    <string name="pref_key_db_last_restore_time">db_last_restore_time</string>
+    <string name="pref_key_db_restore_backup">db_restore_backup</string>
+    <string name="pref_key_db_backups_resumed">db_backups_resumed</string>
+    <string name="pref_key_db_dropbox_do_backup">db_dropbox_do_backup</string>
+    <string name="pref_key_db_dropbox_restore">db_dropbox_restore</string>
+    <string name="pref_key_db_dropbox_linked">db_dropbox_linked</string>
+    <string name="pref_key_db_dropbox_access_token">db_dropbox_access_token</string>
+    <string name="pref_key_reset_all">reset_all</string>
+
+
+    <string-array name="pref_dial_image_names">
+        <item>Alan</item>
+        <item>Hyperdrive turning tool</item>
+    </string-array>
+
+    <string-array name="pref_dial_image_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="pref_dial_snap_names">
+        <item>none</item>
+        <item>1/8</item>
+        <item>1/16</item>
+        <item>1/32</item>
+        <item>1/64</item>
+    </string-array>
+
+    <string-array name="pref_dial_snap_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <string-array name="pref_time_mode_names">
+        <item>Ask every time</item>
+        <item>Real time only</item>
+        <item>User-picked time only</item>
+    </string-array>
+
+    <string-array name="pref_time_mode_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+
+    <string-array name="pref_db_backup_freq_names">
+        <item>Hourly</item>
+        <item>Daily</item>
+        <item>Weekly</item>
+    </string-array>
+
+    <string-array name="pref_db_backup_freq_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="pref_db_backup_limit_names">
+        <item>1 week</item>
+        <item>1 month</item>
+        <item>1 year</item>
+    </string-array>
+
+    <string-array name="pref_db_backup_limit_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="pref_tag_prompt_names">
+        <item>Before turning</item>
+        <item>After turning</item>
+    </string-array>
+
+    <string-array name="pref_tag_prompt_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="pref_tag_prompt_def_selection">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="pref_turn_ref_point_names">
+        <item>World-centric</item>
+        <item>Screw-centric</item>
+    </string-array>
+
+    <string-array name="pref_turn_ref_point_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    <string name="title_activity_rat_summary">RatSummaryActivity</string>
+
+
+</resources>

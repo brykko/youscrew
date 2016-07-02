@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_turn"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dip">
+
+    <Button
+        android:layout_width="60dip"
+        android:layout_height="60dip"
+        android:layout_margin="5dip"
+        android:id="@+id/turn_button_plus1"
+        android:layout_alignTop="@+id/turn_layout_dial"
+        android:layout_alignRight="@+id/turn_layout_dial"
+        android:text="+1"
+        android:textSize="26dip"
+        android:visibility="gone"
+        style="@style/Widget.AppCompat.Button" />
+
+    <!-- TextView to diplay string describing when last turned-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/turn_textview_lastturn"
+        android:layout_marginTop="15dip"
+        android:textSize="16dip"
+        android:text="last turned blah blah..."
+        android:layout_alignParentTop="true"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/turn_textview_comment"
+        android:layout_marginTop="15dip"
+        android:textSize="10dip"
+        android:text="comment comment coooommmmeeeEEENNNNNTTT"
+        android:textStyle="italic"
+        android:layout_below="@+id/turn_textview_lastturn"/>
+
+    <LinearLayout
+        android:id="@+id/turn_layout_toplabels"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dip"
+        android:layout_below="@id/turn_textview_comment">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:layout_weight="1"
+            android:text="Turns"
+            android:textSize="16dip"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:layout_weight="1"
+            android:text="Turns total"
+            android:textSize="16dip"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:layout_weight="1"
+            android:text="Depth"
+            android:textSize="16dip"/>
+
+    </LinearLayout>
+
+    <!-- SET OF TEXTVIEWS ABOVE THE DIAL-->
+    <LinearLayout
+        android:id="@+id/turn_layout_toptextviews"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/turn_layout_toplabels">
+
+        <!-- Amount turned this session -->
+        <TextView
+            android:id="@+id/turn_textview_turned_this_session"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:textSize="24dip"
+            android:text="test 1"
+            android:layout_weight="1"/>
+
+        <!-- Total turns -->
+        <TextView
+            android:id="@+id/turn_textview_total_turns"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:textSize="24dip"
+            android:text="test 2"
+            android:layout_weight="1"/>
+
+
+        <!-- Current depth -->
+        <TextView
+            android:id="@+id/turn_textview_depth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:textSize="24dip"
+            android:text="test 3"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <!-- THE TURNING DIAL -->
+    <FrameLayout
+        android:id="@+id/turn_layout_dial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/turn_layout_toptextviews"
+        android:clipToPadding="false">
+
+        <ImageView
+            android:id="@+id/imageView_turn"
+            android:src="@drawable/alan"
+            android:scaleType="matrix"
+            android:layout_height="300dip"
+            android:layout_width="300dip"
+            android:layout_gravity="center">
+        </ImageView>
+
+        <TextView
+            android:id="@+id/turn_textview_tt_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="50dip"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:shadowColor="@color/black"
+            android:shadowRadius="20"
+            android:padding="20px"/>
+
+    </FrameLayout>
+
+    <!--  ACTION BUTTONS AT BOTTOM -->
+    <LinearLayout
+        android:id = "@+id/turn_layout_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="100dip"
+        android:layout_below="@+id/turn_layout_dial">
+
+        <Button
+            android:id="@+id/turn_button_next"
+            android:text="Next"
+            android:textSize="20dip"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_margin="10dip"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_weight="1"
+            android:shadowRadius="20"
+            android:shadowColor="@color/white"/>
+
+        <Button
+            android:id="@+id/turn_button_ttmenu"
+            android:text="Menu"
+            android:textSize="20dip"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_margin="10dip"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_weight="1"
+            android:shadowRadius="20"
+            android:shadowColor="@color/white"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/turn_button_initial"
+        android:layout_width="match_parent"
+        android:layout_height="100dip"
+        android:layout_below="@+id/turn_layout_dial"
+        android:layout_margin="10dip"
+        android:text="Set initial angle"
+        android:textSize="22dip"
+        android:textStyle="bold"
+        android:gravity="center"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:visibility="invisible"/>
+
+
+</RelativeLayout>

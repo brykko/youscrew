@@ -1,0 +1,141 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="Tags">
+
+        <Preference
+            android:title="Edit tags"
+            android:key="@string/pref_key_edit_tags" />
+
+        <SwitchPreference
+            android:title="Show tag hints"
+            android:key="@string/pref_key_tag_hints"
+            android:switchTextOff="off"
+            android:switchTextOn="on"
+            android:defaultValue="true" />
+
+        <MultiSelectListPreference
+            android:title="Auto-prompt for tags"
+            android:key="@string/pref_key_tag_prompt"
+            android:defaultValue="@array/pref_tag_prompt_def_selection"
+            android:entries="@array/pref_tag_prompt_names"
+            android:entryValues="@array/pref_tag_prompt_values" />
+
+        <CheckBoxPreference
+            android:title="Suppress tagging during first session"
+            android:key="@string/pref_key_tag_suppress_first_session"
+            android:defaultValue="true" />
+
+        <Preference
+            android:title="Restore default tags"
+            android:key="@string/pref_key_restore_default_tags" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Turning">
+
+        <ListPreference
+            android:key="@string/pref_key_dial_image"
+            android:title="Turning dial image"
+            android:entries="@array/pref_dial_image_names"
+            android:entryValues="@array/pref_dial_image_values"
+            android:defaultValue="1" />
+
+        <ListPreference
+            android:key="@string/pref_key_dial_snap"
+            android:title="Snap dial turns to amount"
+            android:entries="@array/pref_dial_snap_names"
+            android:entryValues="@array/pref_dial_snap_values"
+            android:defaultValue="2" />
+
+        <EditTextPreference
+            android:key="@string/pref_key_microns_per_turn"
+            android:title="Default microns per turn"
+            android:defaultValue="@integer/default_microns_per_turn"
+            android:inputType="number"/>
+
+        <EditTextPreference
+            android:key="@string/pref_key_new_unit_dist"
+            android:title="Microns for new units"
+            android:defaultValue="50"
+            android:inputType="number" />
+
+        <ListPreference
+            android:key="@string/pref_key_turn_ref_point"
+            android:title="Reference point for turning"
+            android:defaultValue="0"
+            android:entries="@array/pref_turn_ref_point_names"
+            android:entryValues="@array/pref_turn_ref_point_values"
+            />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Database options">
+
+        <SwitchPreference
+            android:key="db_delete_lock"
+            android:title="Lock database to prevent deletion"
+            android:switchTextOff="Unlocked"
+            android:switchTextOn="Locked"
+            android:defaultValue="false" />
+
+        <Preference
+            android:key="db_purge_all"
+            android:title="Purge database" />
+        <!-- TODO: make this delete the db : Preference.onPreferenceClickListener -->
+
+        <SwitchPreference
+            android:key="@string/pref_key_db_do_backups"
+            android:title="Automatic backups"
+            android:defaultValue="true"
+            android:switchTextOn="On"
+            android:switchTextOff="Off" />
+
+        <Preference
+            android:key="@string/pref_key_db_restore_backup"
+            android:title="Restore database backup" />
+        <!-- TODO: make activity to restore db : Preference.onPreferenceClickListener -->
+
+        <SwitchPreference
+            android:key="@string/pref_key_db_dropbox_do_backup"
+            android:title="Sync backups to Dropbox"
+            android:defaultValue="false"
+            android:switchTextOff="Off"
+            android:switchTextOn="On" />
+
+        <Preference
+            android:key="@string/pref_key_db_dropbox_restore"
+        android:title="Restore from Dropbox backup" />
+
+        <Preference
+            android:key="@string/pref_key_reset_all"
+            android:title="Reset app" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Other">
+
+        <EditTextPreference
+            android:key="@string/pref_key_tetrode_default_number"
+            android:title="Default number of tetrodes"
+            android:inputType="number"
+            android:numeric="integer"
+            android:defaultValue="@integer/default_num_tetrodes" />
+
+        <MultiSelectListPreference
+            android:key="@string/pref_key_tetrode_default_references"
+            android:title="Default reference tetrodes" />
+
+        <ListPreference
+            android:key="time_mode"
+            android:title="Session time mode"
+            android:entries="@array/pref_time_mode_names"
+            android:entryValues="@array/pref_time_mode_values"
+            android:defaultValue="0" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

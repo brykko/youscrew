@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Here are listed all of the default tag groups and tags
+
+-->
+<resources>
+    <string-array name="tag_group_names">
+        <item>LFP</item>
+        <item>Spike amp</item>
+        <item>Clusters</item>
+        <item>Spike rhythms</item>
+        <item>Cells</item>
+        <item>Moved</item>
+    </string-array>
+
+    <string-array name="tag_group_hints">
+        <item>Characteristics of LFP</item>
+        <item>Amplitude of largest spikes</item>
+        <item>Appearance of clusters</item>
+        <item>Spiking rhythmicity</item>
+        <item>Types of cell present</item>
+        <item>Movement of tetrode</item>
+    </string-array>
+
+    <!-- Hex 6-letter colour string #RRGGBB -->
+    <string-array name="tag_group_colours">
+        <item>#ffcdd2</item>
+        <item>#a5d6a7</item>
+        <item>#e1bee7</item>
+        <item>#ffcc80</item>
+        <item>#cccc88</item>
+        <item>#5f8fdd</item>
+    </string-array>
+
+    <!--1 = no, 2 = pre, 3 = post, 4 = both -->
+    <integer-array name="tag_group_mandatory">
+        <item>4</item>
+        <item>4</item>
+        <item>4</item>
+        <item>4</item>
+        <item>1</item>
+        <item>3</item>
+        <!--<item>0</item>-->
+        <!--<item>0</item>-->
+    </integer-array>
+
+    <!-- Integer 1-4 as above -->
+    <integer-array name="tag_group_in_use">
+        <item>4</item>
+        <item>4</item>
+        <item>4</item>
+        <item>4</item>
+        <item>4</item>
+        <item>3</item>
+    </integer-array>
+
+    <!--1 = unconstrained, 2 = constrained -->
+    <integer-array name="tag_group_single_constraint">
+        <item>1</item>
+        <item>2</item>
+        <item>1</item>
+        <item>2</item>
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
+
+    <string-array name="tag_names">
+        <item>1,flat</item>
+        <item>1,lively</item>
+        <item>1,noisy</item>
+        <item>1,slow waves</item>
+        <item>1,theta L</item>
+        <item>1,theta M</item>
+        <item>1,theta H</item>
+        <item>1,theta INV</item>
+
+        <item>2,silent</item>
+        <item>2,low-amp</item>
+        <item>2,100</item>
+        <item>2,150</item>
+        <item>2,200</item>
+        <item>2,300+</item>
+
+        <item>3,none</item>
+        <item>3,poor</item>
+        <item>3,good</item>
+        <item>3,streaky</item>
+        <item>3,round</item>
+        <item>3,MUA cloud</item>
+        <item>3,MUA streak</item>
+
+        <item>4,theta Lo</item>
+        <item>4,theta Med</item>
+        <item>4,theta Hi</item>
+        <item>4,asynchronous</item>
+
+        <item>5,grid</item>
+        <item>5,grid-hd</item>
+        <item>5,hd</item>
+        <item>5,border</item>
+        <item>5,spatial</item>
+        <item>5,fs</item>
+        <item>5,other</item>
+
+        <item>6,no</item>
+        <item>6,unsure</item>
+        <item>6,yes</item>
+
+
+    </string-array>
+
+</resources>
