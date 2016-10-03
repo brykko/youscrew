@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.res.TypedArrayUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,7 @@ import com.brick.youscrew.graphics.TimeDepthGraph;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -145,7 +147,14 @@ public class RatSummaryActivityFragment extends Fragment {
 
         Tetrode tetrode = mTetrodes[tetrodeIndex];
 
+        // Get array of all turn events for the current tetrode
         Turn[] turns = tetrode.findTurns(mDb);
+        // Reverse the array; we need it chronologically ascending
+        List<Turn> turnList = Arrays.asList(turns);
+        Collections.reverse(turnList);
+        turns = (Turn[]) turnList.toArray();
+
+
         List<long[]> tagIdsPre        = new ArrayList<>();
         List<long[]> tagIdsPerPre     = new ArrayList<>();
         List<long[]> tagIdsPost       = new ArrayList<>();
@@ -196,7 +205,7 @@ public class RatSummaryActivityFragment extends Fragment {
                 // Create a new tag chart
                 final TagChart tagChart = new TagChart(getActivity());
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT, 45);
+                        LinearLayout.LayoutParams.MATCH_PARENT,45);
                 tagChart.setLayoutParams(layoutParams);
                 tagChartPanel.addView(tagChart);
 

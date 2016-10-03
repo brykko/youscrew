@@ -82,7 +82,7 @@ public class TagChart extends View {
 
         getGlobalVisibleRect(visibleRect);
 
-        mScaleX = (visibleRect.right - visibleRect.left - 2*Axis.MARGIN_LEFT) / numTurns;
+        mScaleX = (visibleRect.right - visibleRect.left - Axis.MARGIN_LEFT - Axis.MARGIN_RIGHT) / numTurns;
         mScaleY = (visibleRect.bottom - visibleRect.top - 2*Axis.MARGIN_LEFT) / numTurns;
 
 
