@@ -127,18 +127,5 @@ public class TagEvent extends Tag {
         return tagList;
     }
 
-//    public static List<TagEvent> fromTurnIdAllTypes(SQLiteDatabase db, long turnId) {
-//        //Get a list of all tag events of a single turn record
-//
-//        List<TagEvent> tagList = new ArrayList<>();
-//
-//        tagList.addAll(fromTurnId(db, turnId, TurnDbUtils.TAG_TYPE_PRETURN));
-//        tagList.addAll(fromTurnId(db, turnId, TurnDbUtils.TAG_TYPE_POSTTURN));
-//        tagList.addAll(fromTurnId(db, turnId, TurnDbUtils.TAG_TYPE_PERSISTENT_PRE));
-//        tagList.addAll(fromTurnId(db, turnId, TurnDbUtils.TAG_TYPE_PERSISTENT_POST));
-//
-//        return tagList;
-//
-//    }
 
 }

@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.brick.youscrew.data.TurnContract.TagEntry;
 
@@ -138,7 +139,7 @@ public class Tag extends DbEntity2 {
 
     public static long[] parseIdsFromString(String csv) {
 
-        if (csv == null) {
+        if (csv == null || csv.length() == 0) {
             return null;
         }
         else {
@@ -149,7 +150,16 @@ public class Tag extends DbEntity2 {
 
             long[] tagIds = new long[numTags];
             for (int i = 0; i < numTags; i++) {
-                tagIds[i] = Long.parseLong(tagIdStrings[i]);
+
+                try {
+                    tagIds[i] = Long.parseLong(tagIdStrings[i]);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e(LOG_TAG, "Failed to parse long from '" + tagIdStrings[i] +
+                            "' in csv string '" + csv + "'");
+                }
+
             }
 
             return tagIds;

@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.brick.youscrew.data.TurnContract.*;
+import com.brick.youscrew.utils.AppInstance;
 
 /**
  * Created by windows on 07.02.2016.
@@ -26,6 +27,10 @@ public class TurnDbHelper extends SQLiteOpenHelper {
         // Implements a singleton pattern for this class. The class constructor
         // is private, so can only be accessed via this method, which enforces a
         // single instance.
+
+        if (context == null) {
+            context = AppInstance.getAppContext();
+        }
 
         if (sInstance == null) {
             sInstance = new TurnDbHelper(context.getApplicationContext());

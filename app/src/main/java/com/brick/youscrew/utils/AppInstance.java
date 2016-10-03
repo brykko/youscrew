@@ -75,11 +75,11 @@ public final class AppInstance {
         return sSetupInitialized;
     }
 
-    public static void clear() {
+    public static Context getAppContext() { return sApplicationContext; }
 
+    public static void clear() {
         // Nullify the instance
         sInstance = null;
-
     }
 
     public static void runSetupTasks() {

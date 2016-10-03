@@ -110,8 +110,8 @@ public final class TurnDbUtils {
     public static final int TETRODE_REF_YES = 1;
     public static final int TETRODE_REF_NO = 2;
 
-    public static final int TETRODE_TURNED = 1;
-    public static final int TETRODE_NOT_TURNED = 2;
+//    public static final int TETRODE_TURNED = 1;
+//    public static final int TETRODE_NOT_TURNED = 2;
 
     public static final int TETRODE_TAGGABLE = 1;
     public static final int TETRODE_NONTAGGABLE = 2;
@@ -2594,10 +2594,6 @@ public final class TurnDbUtils {
 
     }
 
-//    public static String makeCommaSepString(ArrayList<Integer> list) {
-//        return makeCommaSepString(list.toArray(new Integer[list.size()]));
-//    }
-
     public static String makeCommaSepString(ArrayList<Long> list) {
         return makeCommaSepString(list.toArray(new Long[list.size()]));
     }
@@ -2647,20 +2643,13 @@ public final class TurnDbUtils {
     public static long[] commaSepStringToLongs(String commaSep) {
         // Convert a comma-separated string into an int array
 
-//        Log.v(LOG_TAG, "Parsing tagId CSV string: '" + commaSep + "'");
-
-//        String[] strings = commaSep.split("\\s*,\\s*");
 
         if (commaSep.length() > 0) {
             String[] strings = commaSep.split(",");
             long[] longs = new long[strings.length];
 
             for (int n = 0; n < strings.length; n++) {
-//            if (strings[n].length() > 0) {
-//                Log.v(LOG_TAG, "Parsing tagId '" + strings[n] + "'");
-//                longs[n] = Long.parseLong(strings[n]);
                 longs[n] = GeneralUtils.longValueOf(strings[n]);
-//            }
             }
 
             return longs;

@@ -22,6 +22,7 @@ public class TagGroup {
     private int mSingleConstraint;
     private int mInUse;
     private int mDeleted;
+//    private List<Tag> mChildTags;
 
     public TagGroup(SQLiteDatabase db, long rowId) {
 
@@ -35,7 +36,10 @@ public class TagGroup {
         mDeleted           = c.getInt(     c.getColumnIndex(TagGroupEntry.COLUMN_DELETED));
 
         mColor          = Color.parseColor(c.getString(c.getColumnIndex(TagGroupEntry.COLUMN_COLOUR)));
+
         c.close();
+
+//        mChildTags = findChildTags(db, null);
 
     }
 
@@ -63,7 +67,9 @@ public class TagGroup {
         return mDeleted;
     }
 
-    public List<Tag> findChildTags(SQLiteDatabase db, int inUseCode) {
+//    public List<Tag> getChildTags() { return mChildTags; }
+
+    public List<Tag> findChildTags(SQLiteDatabase db, Integer inUseCode) {
 
         List<Tag> tagList = new ArrayList<>();
 
@@ -71,10 +77,15 @@ public class TagGroup {
 
         long tagId;
 
+        c.moveToFirst();
+
         for (int t = 0; t < c.getCount(); t++) {
             tagId = c.getLong(c.getColumnIndex(TagEntry._ID));
             tagList.add(new Tag(db, tagId));
+            c.moveToNext();
         }
+
+        c.close();
 
         return tagList;
 

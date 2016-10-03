@@ -21,7 +21,7 @@ public class Tag {
     protected String mName;
     protected int mDeleted;
     protected long mGroupId;
-    protected TagGroup mParentGroup;
+//    protected TagGroup mParentGroup;
 
     public Tag(SQLiteDatabase db, long tagId) {
 
@@ -35,13 +35,13 @@ public class Tag {
         mGroupId =  c.getLong(c.getColumnIndex(TagEntry.COLUMN_TAG_GROUP_KEY));
         c.close();
 
-        // Construct parent group object
-        mParentGroup = new TagGroup(db, mGroupId);
+//         Construct parent group object
+//        mParentGroup = new TagGroup(db, mGroupId);
 
     }
 
-    public TagGroup getParentGroup() {
-        return mParentGroup;
+    public TagGroup findParentGroup(SQLiteDatabase db) {
+        return new TagGroup(db, mGroupId);
     }
 
     public String getName() {

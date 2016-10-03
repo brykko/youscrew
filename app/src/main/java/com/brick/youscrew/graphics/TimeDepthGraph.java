@@ -30,6 +30,9 @@ public class TimeDepthGraph extends View {
 
     private static final String LOG_TAG = TimeDepthGraph.class.getSimpleName();
 
+    private static final int LINE_WIDTH_FOCUS = 8;
+    private static final int LINE_WIDTH_NONFOCUS = 3;
+
     private final float DEPTH_TICK_INTERVAL = 200;
 
     private final int DATA_DEPTH = 1;
@@ -42,6 +45,8 @@ public class TimeDepthGraph extends View {
 
     private Line[] mLayers;
     private Axis[] mAxes;
+
+    private int mLineFocusIndex = 0;
 
     private LayerDrawable mLayerDrawable;
 
@@ -79,6 +84,7 @@ public class TimeDepthGraph extends View {
 
         float currentDepth;
 
+        // Determine maximum depth of each TT
         for (Turn turn : mSessions[mSessions.length-1].findTurns(db)) {
             currentDepth = (float) turn.getDepth();
             if (currentDepth > mMaxTetrodeDepth) {
@@ -91,15 +97,44 @@ public class TimeDepthGraph extends View {
         getGlobalVisibleRect(visibleRect);
         visibleRect.toString();
 
-        mScaleX = (visibleRect.right - visibleRect.left - 2*Axis.OFFSET_STANDARD) / mSessions.length;
-        mScaleY = (visibleRect.bottom - visibleRect.top - 2*Axis.OFFSET_STANDARD) / mMaxTetrodeDepth;
+        mScaleX = (visibleRect.right - visibleRect.left - Axis.MARGIN_LEFT - Axis.MARGIN_RIGHT) / mSessions.length;
+        mScaleY = (visibleRect.bottom - visibleRect.top - 2*Axis.MARGIN_Y) / mMaxTetrodeDepth;
+
+        makeAxes();
 
         mLayers = makeLayers(db);
 
         mLayoutInitialized = true;
 
+
+    }
+
+    public void setLineFocus(int index) {
+
+        if (!mLayoutInitialized) { return; }
+
+        int lastIndex = mLineFocusIndex;
+        int newIndex = index;
+
+        Line line = mLayers[lastIndex];
+        line.setStrokeWidth(LINE_WIDTH_NONFOCUS);
+        line.setDotRadius((int)(LINE_WIDTH_NONFOCUS*1.5));
+
+        line = mLayers[newIndex];
+        line.setStrokeWidth(LINE_WIDTH_FOCUS);
+        line.setDotRadius((int)(LINE_WIDTH_FOCUS*1.5));
+
+        mLineFocusIndex = newIndex;
+
         invalidate();
 
+    }
+
+    private void makeAxes() {
+        RectF dataBounds = new RectF(0f, 0f, mSessions.length, mMaxTetrodeDepth);
+        mAxes = new Axis[2];
+        mAxes[0] = makeAxes(Axis.DIRECTION_X, DATA_SESSION_NUMBER, dataBounds);
+        mAxes[1] = makeAxes(Axis.DIRECTION_Y, DATA_DEPTH, dataBounds);
     }
 
     private Line[] makeLayers(SQLiteDatabase db) {
@@ -111,12 +146,6 @@ public class TimeDepthGraph extends View {
             int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256) );
             layers[t] = makeTetrodePlot(db, mTetrodes[t], DATA_SESSION_NUMBER, DATA_DEPTH, color);
         }
-
-        RectF dataBounds = new RectF(0f, 0f, mSessions.length, mMaxTetrodeDepth);
-
-        mAxes = new Axis[2];
-        mAxes[0] = makeAxes(Axis.DIRECTION_X, DATA_SESSION_NUMBER, dataBounds);
-        mAxes[1] = makeAxes(Axis.DIRECTION_Y, DATA_DEPTH, dataBounds);
 
         return layers;
 
@@ -246,8 +275,8 @@ public class TimeDepthGraph extends View {
                     throw new IllegalArgumentException("Illegal data type value for Y");
             }
 
-            x[t] = x[t]*mScaleX + Axis.OFFSET_STANDARD;
-            y[t] = y[t]*mScaleY + Axis.OFFSET_STANDARD;
+            x[t] = x[t]*mScaleX + Axis.MARGIN_LEFT;
+            y[t] = y[t]*mScaleY + Axis.MARGIN_LEFT;
 
 //            Log.v(LOG_TAG, "x = " + Float.toString(x[t]) + ", y = " + Float.toString(y[t]));
 
@@ -256,7 +285,7 @@ public class TimeDepthGraph extends View {
         Line line = new Line(getContext(), x, y);
         line.setColor(color);
         line.setStrokeWidth(5);
-        line.setDotRadius(8);
+        line.setDotRadius(7);
 
         return line;
 
@@ -269,12 +298,12 @@ public class TimeDepthGraph extends View {
 
         if (mLayoutInitialized) {
 
-            for (Line layer : mLayers) {
-                layer.draw(canvas);
-            }
-
             for (Axis axis : mAxes) {
                 axis.draw(canvas);
+            }
+
+            for (Line layer : mLayers) {
+                layer.draw(canvas);
             }
         }
 

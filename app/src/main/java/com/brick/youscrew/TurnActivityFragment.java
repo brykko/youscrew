@@ -346,7 +346,7 @@ public class TurnActivityFragment extends Fragment {
                 mButtonNextTt.setVisibility(View.INVISIBLE);
         }
 
-        if (mActivityMode == MODE_TURN && mTetrode.wasEverTurned(mDb) == TurnDbUtils.TETRODE_NOT_TURNED) {
+        if (mActivityMode == MODE_TURN && mTetrode.wasEverTurned(mDb) == Tetrode.EVER_TURNED_NO) {
             mRootView.findViewById(R.id.turn_button_plus1).setVisibility(View.VISIBLE);
         }
 
@@ -369,7 +369,11 @@ public class TurnActivityFragment extends Fragment {
                 getActivity().setResult(Activity.RESULT_OK);
 
                 if (mGetTagsPost && !mSuppressTagging) {
-                    GeneralUtils.getTags(TurnActivityFragment.this, TurnDbUtils.TURNTIME_POST, mTurn.getId(), TagActivityFragment.MODE_UPDATE);
+                    GeneralUtils.getTags(
+                            TurnActivityFragment.this,
+                            TurnDbUtils.TURNTIME_POST,
+                            mTurn.getId(),
+                            TagActivityFragment.MODE_UPDATE);
                 }
                 else {
                     getActivity().finish();
@@ -509,6 +513,8 @@ public class TurnActivityFragment extends Fragment {
         mTetrode = mTurn.getTetrode();
         mRat = mTurn.getRat();
 
+        mTurn.updateFromDb(mDb);
+
         mSingleTetrodeMode = mRat.getInt(TurnContract.RatEntry.COLUMN_TETRODES_INDEPENDENT) == Rat.TETRODES_INDEPENDENT_YES;
 
         Log.v(LOG_TAG, "Single tetrode mode = " + Boolean.toString(mSingleTetrodeMode));
@@ -531,7 +537,7 @@ public class TurnActivityFragment extends Fragment {
             Log.v(LOG_TAG, "Turn record marked as NOT TURNED THIS SESSION");
         }
 
-        if (mTetrode.getInt(TetrodeEntry.COLUMN_EVER_TURNED) == TurnDbUtils.TETRODE_TURNED) {
+        if (mTetrode.getInt(TetrodeEntry.COLUMN_EVER_TURNED) == Tetrode.EVER_TURNED_YES) {
             Log.v(LOG_TAG, "Tetrode PREVIOUSLY TURNED");
         }
         else {
@@ -1027,12 +1033,17 @@ public class TurnActivityFragment extends Fragment {
             }
 
             // If this is the TTs first turn, update the TT record
-            if (mTetrode.getInt(TetrodeEntry.COLUMN_EVER_TURNED) == TurnDbUtils.TETRODE_NOT_TURNED) {
+            if (mTetrode.getInt(TetrodeEntry.COLUMN_EVER_TURNED) == Tetrode.EVER_TURNED_NO) {
 
                 mTetrode.set(TetrodeEntry.COLUMN_EVER_TURNED, Tetrode.EVER_TURNED_YES);
 
                 if (mSingleTetrodeMode) {
                     mTetrode.writeToDb(mDb);
+
+                    Log.v(LOG_TAG, "Tetrode marked as turned!");
+                    if (mTetrode.getInt(TetrodeEntry.COLUMN_EVER_TURNED) == Tetrode.EVER_TURNED_YES) {
+                        Log.v(LOG_TAG, "Retrieved value is also turned!");
+                    }
                 }
                 else {
                     for (Tetrode tetrode : mRat.findTetrodes(mDb, null)) {
@@ -1092,7 +1103,7 @@ public class TurnActivityFragment extends Fragment {
         long timeLastTurned;
 
         // If the tetrode has ever been turned:
-        if (mTetrode.getInt(TetrodeEntry.COLUMN_EVER_TURNED) == TurnDbUtils.TETRODE_TURNED) {
+        if (mTetrode.getInt(TetrodeEntry.COLUMN_EVER_TURNED) == Tetrode.EVER_TURNED_YES) {
 
             // If it was already turned this session, get the record and the time
             if (wasTurnedThisSession) {
@@ -1101,7 +1112,13 @@ public class TurnActivityFragment extends Fragment {
 
             // Otherwise, get the previous turn record and its time
             else {
-                timeLastTurned = mTurn.findLastTurn(mDb).getLong(TurnEntry.COLUMN_TIME);
+                Turn lastTurnTurned = mTurn.findLastTurnTurned(mDb);
+                if (lastTurnTurned != null) {
+                    timeLastTurned = lastTurnTurned.getLong(TurnEntry.COLUMN_TIME);
+                }
+                else {
+                    throw new RuntimeException("Found no prior Turn records with turning");
+                }
             }
 
             int flags = 0;
@@ -1126,11 +1143,6 @@ public class TurnActivityFragment extends Fragment {
         else {
             textLastTurn.setText("Tetrode has never been turned");
         }
-
-    }
-
-    public int getEverTurned() {
-        return mTetrode.wasEverTurned(mDb);
     }
 
     public int getInitialAngleSet() {

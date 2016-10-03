@@ -38,6 +38,7 @@ public class Tetrode extends DbEntity2 {
     public static final int REFERENCE_YES = 1;
     public static final int REFERENCE_NO = 2;
 
+    private long mRatId;
     private Rat mRat;
 
     public Tetrode() {
@@ -66,11 +67,10 @@ public class Tetrode extends DbEntity2 {
 
         Cursor c = TurnDbUtils.singleEntryQuery(db, TetrodeEntry.TABLE_NAME, null, id, null);
 
-        Rat parentRat = new Rat(db, c.getLong(c.getColumnIndex(TetrodeEntry.COLUMN_RAT_KEY)));
+        mRatId = c.getLong(c.getColumnIndex(TetrodeEntry.COLUMN_RAT_KEY));
 
         c.close();
 
-        mRat = parentRat;
         mId = id;
         updateFromDb(db);
 
@@ -95,7 +95,7 @@ public class Tetrode extends DbEntity2 {
     public Tetrode (Bundle bundle) {
         super(bundle);
         mRat = bundle.getParcelable(TurnContract.RatEntry.TABLE_NAME);
-        set(TetrodeEntry.COLUMN_RAT_KEY, mRat.getId());
+        set(TetrodeEntry.COLUMN_RAT_KEY, getRat().getId());
     }
 
     public Bundle toBundle() {
@@ -147,20 +147,23 @@ public class Tetrode extends DbEntity2 {
     }
 
     public Rat getRat() {
+        if (mRat == null) {
+            mRat = new Rat(mDb, mRatId);
+        }
         return mRat;
     }
 
     @Override
     public synchronized void updateFromDb(SQLiteDatabase db) {
         super.updateFromDb(db);
-        mRat.updateFromDb(db);
+        if (mRat != null) {
+            mRat.updateFromDb(db);
+        }
     }
 
     public void setInitialAngle (Double initialAngle) {
         // Set a tetrode's initial angle. If the argument initialAngle is null, the database angle
         // will be 'unset' (initial_angle is set to 0 deg, and the initial_angle_set field is set to 'unset')
-
-        ContentValues values = new ContentValues();
 
         int angleSetCode;
 
@@ -198,12 +201,16 @@ public class Tetrode extends DbEntity2 {
         String selection = TurnContract.TurnEntry.COLUMN_TETRODE_KEY + " = ? ";
         String[] selectionArgs = new String[]{Long.toString(mId)};
 
-        // Order results by time (most recent first)
-        String sortOrder = TurnContract.TurnEntry.COLUMN_TIME + " DESC ";
+        // Order results by descending _id (most recent first).
+        // The "time" column can't be used, since turn records where no turning
+        // took place will have zero as their time value.
+        String sortOrder = TurnContract.TurnEntry._ID + " DESC ";
 
         Cursor c = db.query(
                 TurnContract.TurnEntry.TABLE_NAME,
                 null,
+
+
                 selection,
                 selectionArgs,
                 null,

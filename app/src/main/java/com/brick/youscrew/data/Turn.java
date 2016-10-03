@@ -23,8 +23,13 @@ public class Turn extends DbEntity2 {
     public static final int EDITED_NO = 1;
     public static final int EDITED_YES = 2;
 
+    // Reference to parent session and tetrode objs; these will ONLY be filled when accessed.  When
+    // parcelled, if not previously accessed they will be parcelled as null objs.
     private Session mSession;
     private Tetrode mTetrode;
+
+    // The parent session and tetrode id are necessary for creating objs when necessary
+    private long mSessionId, mTetrodeId;
 
 
     public Turn() {
@@ -46,17 +51,14 @@ public class Turn extends DbEntity2 {
                 id,
                 null);
 
-        long sessionId = c.getLong(c.getColumnIndex(TurnEntry.COLUMN_SESSION_KEY));
-        long tetrodeId = c.getLong(c.getColumnIndex(TurnEntry.COLUMN_TETRODE_KEY));
+        mSessionId = c.getLong(c.getColumnIndex(TurnEntry.COLUMN_SESSION_KEY));
+        mTetrodeId = c.getLong(c.getColumnIndex(TurnEntry.COLUMN_TETRODE_KEY));
 
         c.close();
 
-        mSession = new Session(db, sessionId);
-        mTetrode = new Tetrode(db, tetrodeId);
         mId = id;
 
         updateFromDb(db);
-
     }
 
     public Turn(Session parentSession, Tetrode parentTetrode, SQLiteDatabase db, long id) {
@@ -112,8 +114,8 @@ public class Turn extends DbEntity2 {
     @Override
     protected Bundle toBundle() {
         Bundle bundle = super.toBundle();
-        bundle.putParcelable(mSession.getTableName(), mSession);
-        bundle.putParcelable(mTetrode.getTableName(), mTetrode);
+        bundle.putParcelable(TurnContract.SessionEntry.TABLE_NAME, mSession);
+        bundle.putParcelable(TurnContract.TetrodeEntry.TABLE_NAME, mTetrode);
         return bundle;
     }
 
@@ -122,22 +124,35 @@ public class Turn extends DbEntity2 {
      */
 
     public Rat getRat() {
-        return mSession.getRat();
+        if (getSession() == null) {
+            Log.v(LOG_TAG, "Session returned null!");
+        };
+        return getSession().getRat();
     }
 
     public Session getSession() {
+        if (mSession == null) {
+            mSession = new Session(mDb, mSessionId);
+        }
         return mSession;
     }
 
     public Tetrode getTetrode() {
+        if (mTetrode == null) {
+            mTetrode = new Tetrode(mDb, mTetrodeId);
+        }
         return mTetrode;
     }
 
     @Override
     public synchronized void updateFromDb(SQLiteDatabase db) {
         super.updateFromDb(db);
-        mSession.updateFromDb(db);
-        mTetrode.updateFromDb(db);
+        if (mTetrode != null) {
+            mTetrode.updateFromDb(db);
+        }
+        if (mSession != null) {
+            mSession.updateFromDb(db);
+        }
     }
 
     public boolean hasTagsPre() {
@@ -147,7 +162,6 @@ public class Turn extends DbEntity2 {
     public boolean hasTagsPost() {
         return getString(TurnEntry.COLUMN_TAG_ID_POST) != null;
     }
-
 
     public double getTurnsTotal() {
 
@@ -186,14 +200,23 @@ public class Turn extends DbEntity2 {
         return getTurnsThisSession() * getRat().getTurnMicrometers();
     }
 
+    public long[] getTagIds(int tagType) {
+        String tagIdColumn = Tag.getTagListColumn(tagType);
+        String tagIdString = getString(tagIdColumn);
+        Log.v(LOG_TAG, "Tag id CSV string = '" + tagIdString + "'");
+        return Tag.parseIdsFromString(tagIdString);
+    }
+
     public void setAngles(double startAngle, double endAngle) {
 
         Long time;
 
-        int sessionTimeMode = mSession.getInt(TurnContract.SessionEntry.COLUMN_TIME_MODE);
+        Session session = getSession();
+
+        int sessionTimeMode =session.getInt(TurnContract.SessionEntry.COLUMN_TIME_MODE);
 
         if (sessionTimeMode == TurnDbUtils.TIME_PICKED) {
-            time = mSession.getLong(TurnContract.SessionEntry.COLUMN_TIME_START);
+            time = session.getLong(TurnContract.SessionEntry.COLUMN_TIME_START);
         }
         else if (sessionTimeMode == TurnDbUtils.TIME_REAL) {
             time = System.currentTimeMillis();
@@ -223,14 +246,48 @@ public class Turn extends DbEntity2 {
         // Returns the _id of the last registered turn record before the
         // specified record
 
-        mSession.printContents();
-        if (mSession.getInt(TurnContract.SessionEntry.COLUMN_IS_FIRST_SESSION) == Session.FIRST_YES) {
+        Session session = getSession();
+
+        session.printContents();
+        if (session.getInt(TurnContract.SessionEntry.COLUMN_IS_FIRST_SESSION) == Session.FIRST_YES) {
             return null;
         }
         else {
-            long lastSessionId = mSession.getLong(TurnContract.SessionEntry.COLUMN_SESSION_KEY_LAST);
-            return new Session(db, lastSessionId).findTurnByTetrode(db, mTetrode);
+            long lastSessionId = session.getLong(TurnContract.SessionEntry.COLUMN_SESSION_KEY_LAST);
+            return new Session(db, lastSessionId).findTurnByTetrode(db, getTetrode());
         }
+
+    }
+
+    public Turn findLastTurnTurned(SQLiteDatabase db) {
+        // Get ALL turns for the parent Tetrode.  We do this by finding all turn events for the
+        // Tetrode, and scanning through them until we get to the present
+
+        Turn[] turns = getTetrode().findTurns(db);
+
+        Turn lastTurnTurned = null;
+
+        boolean lookForTurning = false;
+
+        // Go through the turns; they're ordered with the most RECENT first!
+        for (int t=0; t<turns.length; t++) {
+
+            Turn turn = turns[t];
+
+            if (lookForTurning && turn.wasTurnedThisSession()) {
+                lastTurnTurned = turn;
+                break;
+            }
+
+            // When we reach the self Turn, trigger search for the next (i.e. previous in time)
+            // Turn that has turning.
+            if (!lookForTurning && turn.getId() == mId) {
+                lookForTurning = true;
+            }
+
+        }
+
+        return lastTurnTurned;
 
     }
 
@@ -284,11 +341,7 @@ public class Turn extends DbEntity2 {
 
     public Tag[] findTags(SQLiteDatabase db, int tagType) {
 
-        String tagIdColumn = Tag.getTagListColumn(tagType);
-
-        String tagIdString = getString(tagIdColumn);
-
-        long[] tagIds = Tag.parseIdsFromString(tagIdString);
+        long[] tagIds = getTagIds(tagType);
 
         Tag[] tags = null;
 

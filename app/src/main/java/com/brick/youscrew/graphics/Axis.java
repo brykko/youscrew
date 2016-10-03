@@ -7,7 +7,6 @@ import android.graphics.ColorFilter;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 
@@ -19,12 +18,17 @@ public class Axis extends Drawable {
     public static final int DIRECTION_X = 1;
     public static final int DIRECTION_Y = 2;
 
-    public static final float OFFSET_STANDARD = 150;
+    public static final float MARGIN_Y = 150;
+    public static final float MARGIN_LEFT = 200;
+    public static final float MARGIN_RIGHT = 40;
     public final float TICK_OFFSET_STANDARD = 10;
 
     private Paint mPaintLine, mPaintTickLabel, mPaintTitle, mPaintGrid;
 
-    private float mOffset;
+    private float mRightMargin;
+    private float mLeftMargin;
+    private float mYMargin;
+
     private float mTickOffset;
 
     private float mScaleX = 1;
@@ -57,19 +61,16 @@ public class Axis extends Drawable {
             "' for argument 'direction'");
         }
 
-//        if (lowerValue > upperValue) {
-//            throw new IllegalArgumentException("Argument 'upperValue' must has a greater value " +
-//                    "than argument 'lowerValue'");
-//        }
 
         mContext = context;
 
         mBounds = dataBounds;
 
-//        mExtentLower = lowerValue;
-//        mExtentUpper = upperValue;
 
-        mOffset = OFFSET_STANDARD;
+        mLeftMargin = MARGIN_LEFT;
+        mRightMargin = MARGIN_RIGHT;
+        mYMargin = MARGIN_Y;
+
         mTickOffset = TICK_OFFSET_STANDARD;
 
         mDirection = direction;
@@ -85,9 +86,9 @@ public class Axis extends Drawable {
 
         mPaintGrid = new Paint();
         mPaintGrid.setStyle(Paint.Style.STROKE);
-        mPaintGrid.setColor(Color.LTGRAY);
+        mPaintGrid.setColor(Color.GRAY);
         mPaintGrid.setStrokeWidth(2);
-        mPaintGrid.setPathEffect(new DashPathEffect(new float[]{10, 20}, 0));
+        mPaintGrid.setPathEffect(new DashPathEffect(new float[]{5, 5}, 0));
 
         if (direction == DIRECTION_X) {
             mPaintTickLabel.setTextAlign(Paint.Align.LEFT);
@@ -116,11 +117,13 @@ public class Axis extends Drawable {
 
     }
 
-    public void setOffset(float value) {
-        if (value < 0) {
+    public void setMargins(float left, float right, float y) {
+        if (left < 0 || right < 0 || y < 0) {
             throw new IllegalArgumentException("Offset value cannot be negative");
         }
-        mOffset = value;
+        mLeftMargin = left;
+        mRightMargin = right;
+        mYMargin = y;
     }
 
     public void setTickOffset(float value) {
@@ -188,31 +191,31 @@ public class Axis extends Drawable {
 
         if (mDirection == DIRECTION_X) {
 
-            path.moveTo(mBounds.left + mOffset, mOffset);
+            path.moveTo(mLeftMargin, mYMargin);
 
             for (int t=0; t < mNumTicks; t++) {
-                float x = mOffset + mTickPos[t]*mScaleX;
-                path.lineTo(x, mOffset);
-                path.lineTo(x, mOffset-mTickOffset);
-                path.lineTo(x, mOffset);
+                float x = mLeftMargin + mTickPos[t]*mScaleX;
+                path.lineTo(x, mYMargin);
+                path.lineTo(x, mYMargin -mTickOffset);
+                path.lineTo(x, mYMargin);
             }
 
-            path.lineTo(mBounds.right + mOffset, mOffset);
+//            path.lineTo(mBounds.right + mRightMargin, mYMargin);
 
         }
 
         else {
 
-            path.moveTo(mOffset, mBounds.top + mOffset);
+            path.moveTo(mLeftMargin, mYMargin);
 
             for (int t=0; t < mNumTicks; t++) {
-                float y = mOffset + mTickPos[t]*mScaleY;
-                path.lineTo(mOffset, y);
-                path.lineTo(mOffset-mTickOffset, y);
-                path.lineTo(mOffset, y);
+                float y = mYMargin + mTickPos[t]*mScaleY;
+                path.lineTo(mLeftMargin, y);
+                path.lineTo(mLeftMargin -mTickOffset, y);
+                path.lineTo(mLeftMargin, y);
             }
 
-            path.lineTo(mOffset, mBounds.bottom + mOffset);
+//            path.lineTo(mLeftMargin,  mYMargin);
 
         }
 
@@ -232,15 +235,15 @@ public class Axis extends Drawable {
             float x, y, xText, yText;
 
             if (mDirection == DIRECTION_X) {
-                x = mOffset + mTickPos[t]*mScaleX;
+                x = mLeftMargin + mTickPos[t]*mScaleX;
                 xText = x + mPaintTickLabel.getTextSize()/2;
-                y = mOffset - mTickOffset;
+                y = mYMargin - mTickOffset;
                 yText = y;
             }
             else {
-                x = mOffset - mTickOffset;
+                x = mLeftMargin - mTickOffset;
                 xText = x;
-                y = mOffset + mTickPos[t]*mScaleY;
+                y = mYMargin + mTickPos[t]*mScaleY;
                 yText = y + mPaintTickLabel.getTextSize()/2;
             }
 
@@ -251,7 +254,11 @@ public class Axis extends Drawable {
                 canvas.restore();
 
                 if (mShowGrid) {
-                    canvas.drawLine(x, mOffset, x, mOffset+(mBounds.bottom-mBounds.top)*mScaleY, mPaintGrid);
+                    Path path = new Path();
+                    path.moveTo(x, mYMargin);
+                    path.lineTo(x, mYMargin +(mBounds.bottom-mBounds.top)*mScaleY);
+                    canvas.drawPath(path, mPaintGrid);
+//                    canvas.drawLine(x, mYMargin, x, mYMargin +(mBounds.bottom-mBounds.top)*mScaleY, mPaintGrid);
                 }
 
             }
@@ -259,7 +266,11 @@ public class Axis extends Drawable {
                 canvas.drawText(mTickLabels[t], xText, yText, mPaintTickLabel);
 
                 if (mShowGrid) {
-                    canvas.drawLine(mOffset, y, mOffset+(mBounds.right-mBounds.left)*mScaleX, y, mPaintGrid);
+                    Path path = new Path();
+                    path.moveTo(mLeftMargin, y);
+                    path.lineTo(mLeftMargin+(mBounds.right-mBounds.left)*mScaleX, y);
+                    canvas.drawPath(path, mPaintGrid);
+//                    canvas.drawLine(mLeftMargin, y, mLeftMargin+(mBounds.right-mBounds.left)*mScaleX, y, mPaintGrid);
                 }
 
             }
@@ -273,8 +284,8 @@ public class Axis extends Drawable {
 
             if (mDirection == DIRECTION_Y) {
 
-                x = mOffset/2 - mPaintTitle.getTextSize()/2;
-                y = mOffset + (mBounds.top + mBounds.bottom) / 2 * mScaleY;
+                x = mLeftMargin/2 - mPaintTitle.getTextSize()/2;
+                y = mYMargin + (mBounds.top + mBounds.bottom) / 2 * mScaleY;
 
                 canvas.save();
                 canvas.rotate(-90, x, y);
@@ -282,8 +293,8 @@ public class Axis extends Drawable {
                 canvas.restore();
             }
             else {
-                x = mOffset + (mBounds.left + mBounds.right)/2 * mScaleX;
-                y = mOffset/2 - mPaintTitle.getTextSize()/2;
+                x = mLeftMargin + (mBounds.left + mBounds.right)/2 * mScaleX;
+                y = mYMargin /2 - mPaintTitle.getTextSize()/2;
                 canvas.drawText(mTitle, x, y, mPaintTitle);
             }
         }

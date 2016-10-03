@@ -28,7 +28,29 @@ public class TagGroup extends DbEntity2 {
     }
 
     @Override
-    protected void setKeys() {
+    public void setKeys() {
+
+        mKeys = new String[] {
+                TagGroupEntry.COLUMN_COLOUR,
+                TagGroupEntry.COLUMN_DELETED,
+                TagGroupEntry.COLUMN_DISPLAY_INDEX,
+                TagGroupEntry.COLUMN_HINT_TEXT,
+                TagGroupEntry.COLUMN_IN_USE,
+                TagGroupEntry.COLUMN_MANDATORY,
+                TagGroupEntry.COLUMN_NAME,
+                TagGroupEntry.COLUMN_SINGLE_CONSTRAINT,
+        };
+
+        mTypes = new int[] {
+                TYPE_STRING,
+                TYPE_INT,
+                TYPE_INT,
+                TYPE_STRING,
+                TYPE_INT,
+                TYPE_INT,
+                TYPE_STRING,
+                TYPE_INT
+        };
 
     }
 
@@ -85,5 +107,18 @@ public class TagGroup extends DbEntity2 {
         }
 
     };
+
+    public static TagGroup[] findAll(SQLiteDatabase db) {
+
+        DbEntity2[] objs = DbEntity2.findAllInternal(db, "com.brick.youscrew.data.TagGroup", TagGroupEntry.TABLE_NAME);
+        TagGroup[] tagGroups = new TagGroup[objs.length];
+
+        for (int i=0; i< objs.length; i++) {
+            tagGroups[i] = (TagGroup) objs[i];
+        }
+
+        return tagGroups;
+
+    }
 
 }

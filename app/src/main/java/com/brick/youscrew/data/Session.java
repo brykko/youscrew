@@ -27,6 +27,8 @@ public class Session extends DbEntity2 {
     public static final int TIME_MODE_REAL = 1;
     public static final int TIME_MODE_PICKED = 2;
 
+    private long mRatId;
+
     private Rat mRat;
 
     public Session() {
@@ -45,10 +47,10 @@ public class Session extends DbEntity2 {
 
         // Get parent rat
         Cursor c = TurnDbUtils.singleEntryQuery(db, getTableName(), null, id, null);
-        long ratId = c.getLong(c.getColumnIndex(SessionEntry.COLUMN_RAT_KEY));
+        mRatId = c.getLong(c.getColumnIndex(SessionEntry.COLUMN_RAT_KEY));
         c.close();
 
-        mRat = new Rat(db, ratId);
+//        mRat = new Rat(db, ratId);
 
         updateFromDb(db);
 
@@ -107,7 +109,7 @@ public class Session extends DbEntity2 {
     @Override
     protected Bundle toBundle() {
         Bundle bundle = super.toBundle();
-        bundle.putParcelable(mRat.getTableName(), mRat);
+        bundle.putParcelable(TurnContract.RatEntry.TABLE_NAME, mRat);
         return bundle;
     }
 
@@ -134,7 +136,7 @@ public class Session extends DbEntity2 {
     @Override
     public synchronized void updateFromDb(SQLiteDatabase db) {
         super.updateFromDb(db);
-        mRat.updateFromDb(db);
+//        mRat.updateFromDb(db);
     }
 
     public Turn[] findTurns(SQLiteDatabase db) {
@@ -253,6 +255,9 @@ public class Session extends DbEntity2 {
      ------------------------------------------------------------------------------------------ */
 
     public Rat getRat() {
+        if (mRat == null) {
+            mRat = new Rat(mDb, mRatId);
+        }
         return mRat;
     }
 

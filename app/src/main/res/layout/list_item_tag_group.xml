@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- FOR USE IN RATSUMMARYACTIVITYFRAGMENT -->
+<!-- THIS LAYOUT CONTAINS ONE TAG GROUP PANEL-->
+<!--CONTENTS: 1) GROUP TITLE 2) LIST VIEW OF ALL TAGS -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!--TITLE TEXTVIEW -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:id="@+id/textview_title"
+        android:textColor="@color/black"
+        android:textSize="12dp" />
+
+    <!--LINLAYOUT FOR TAG DASH/DOT CHARTS-->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/layout_tags" >
+    </LinearLayout>
+
+</LinearLayout>

@@ -3,15 +3,17 @@ package com.brick.youscrew.data;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.brick.youscrew.tags.*;
+import com.brick.youscrew.tags.Tag;
+import com.brick.youscrew.tags.TagGroup;
 import com.dropbox.client2.exception.DropboxException;
 import com.brick.youscrew.data.TurnContract.RatEntry;
 import com.brick.youscrew.data.TurnContract.SessionEntry;
 import com.brick.youscrew.data.TurnContract.TetrodeEntry;
 import com.brick.youscrew.data.TurnContract.TurnEntry;
-import com.brick.youscrew.tags.TagEvent;
-import com.brick.youscrew.tags.TagGroup;
 import com.brick.youscrew.utils.AppInstance;
 import com.brick.youscrew.utils.BackupHelper;
 import com.opencsv.CSVWriter;
@@ -21,6 +23,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -53,6 +56,12 @@ public class LogWriter {
 
     private String[] mTurnStrings;
 
+    // HashMap linking tagIds to the index of the parent group
+    private HashMap<Long, Integer> mTagGroupHashMap;
+
+    // HashMap linking tagIds to the matching Tag object
+    private HashMap<Long, Tag> mTagHashMap;
+
 
     public LogWriter(Context context, long ratId) throws IOException {
 
@@ -72,6 +81,8 @@ public class LogWriter {
         mDateFormatTurn = new SimpleDateFormat(DATE_FORMAT_TURN);
 
         mCsvWriter = new CSVWriter( new FileWriter(mFilePath), SEPARATOR);
+
+        makeHashMaps();
 
     }
 
@@ -181,7 +192,6 @@ public class LogWriter {
 
     }
 
-
     private String[] makeTurnHeadings() {
 
         List<String> headings = new ArrayList<>();
@@ -277,19 +287,117 @@ public class LogWriter {
 //        strings.add("\"" + comment + "\"");
         mTurnStrings[7] = "\"" + comment + "\"";
 
-        // 7 ) TAGS POST
+        // 7 ) TAGS PRE
+        String[] tagStrings = makeTagGroupStrings(turn, TurnDbUtils.TURNTIME_PRE);
         for (int g = 0; g < mTagGroups.size(); g++) {
+            mTurnStrings[8+g] = tagStrings[g];
 //            strings.add(makeTagGroupString(mTagGroups.get(g).getId(), turn.getId(), TurnDbUtils.TURNTIME_PRE));
-            mTurnStrings[8+g] = makeTagGroupString(mTagGroups.get(g).getId(), turn.getId(), TurnDbUtils.TURNTIME_PRE);
+//            mTurnStrings[8+g] = makeTagGroupString(mTagGroups.get(g).getId(), turn.getId(), TurnDbUtils.TURNTIME_PRE);
         }
 
         // 8 ) TAGS POST
+        tagStrings = makeTagGroupStrings(turn, TurnDbUtils.TURNTIME_POST);
         for (int g = 0; g < mTagGroups.size(); g++) {
+            mTurnStrings[8 + mTagGroups.size() + g] = tagStrings[g];
 //            strings.add(makeTagGroupString(mTagGroups.get(g).getId(), turn.getId(), TurnDbUtils.TURNTIME_POST));
-            mTurnStrings[8+ mTagGroups.size() + g] = makeTagGroupString(mTagGroups.get(g).getId(), turn.getId(), TurnDbUtils.TURNTIME_POST);
+//            mTurnStrings[8+ mTagGroups.size() + g] = makeTagGroupString(mTagGroups.get(g).getId(), turn.getId(), TurnDbUtils.TURNTIME_POST);
         }
 
 //        return strings.toArray(new String[0]);
+
+    }
+
+    private String[] makeTagGroupStrings(Turn turn, int turnTime) {
+
+        int numTagGroups = mTagGroups.size();
+
+        String[] tagFields;
+
+        StringBuilder[] builders = new StringBuilder[numTagGroups];
+
+        if (turnTime == TurnDbUtils.TURNTIME_PRE) {
+            tagFields = new String[] {TurnEntry.COLUMN_TAG_ID_PRE, TurnEntry.COLUMN_TAG_ID_PERSISTENT_PRE};
+        }
+        else {
+            tagFields = new String[] {TurnEntry.COLUMN_TAG_ID_POST, TurnEntry.COLUMN_TAG_ID_PERSISTENT_POST};
+        }
+
+        int numPre, numPost;
+
+        String tagIdStringPre = turn.getString(tagFields[0]);
+        String tagIdStringPost = turn.getString(tagFields[1]);
+
+        long[] tagIdsPre;
+        if (tagIdStringPre != null) {
+            tagIdsPre = TurnDbUtils.commaSepStringToLongs(tagIdStringPre);
+        }
+        else {
+            tagIdsPre = new long[0];
+        }
+
+
+        long[] tagIdsPost;
+
+        if (tagIdStringPost != null) {
+            tagIdsPost = TurnDbUtils.commaSepStringToLongs(tagIdStringPost);
+        }
+        else {
+            tagIdsPost = new long[0];
+        }
+
+        numPre = tagIdsPre.length;
+        numPost = tagIdsPost.length;
+
+        boolean isPersistent;
+
+        for (int t=0; t<numPre+numPost; t++) {
+
+            long tagId;
+
+            if (t < numPre) {
+                tagId = tagIdsPre[t];
+                isPersistent = false;
+            }
+            else {
+                tagId = tagIdsPost[t-numPre];
+                isPersistent = true;
+            }
+
+            // For the current tag Id, determine which tag group it belongs to
+            Log.v(LOG_TAG, "tagId = " + Long.toString(tagId));
+            Integer groupIndex = mTagGroupHashMap.get(tagId);
+            Tag tag = mTagHashMap.get(tagId);
+
+            // Initialize StringBuilder if necessary
+            if (builders[groupIndex] == null) {
+                builders[groupIndex] = new StringBuilder();
+            }
+
+            if (groupIndex != null && tag != null) {
+                if (isPersistent) {
+                    builders[groupIndex].append("(p) ");
+                }
+                builders[groupIndex].append(tag.getName());
+                builders[groupIndex].append("; ");
+            }
+            else {
+                Log.v(LOG_TAG, "Failed to find group for tagId " + Long.toString(tagId));
+            }
+
+
+        }
+
+        String[] tagStrings = new String[numTagGroups];
+        for (int g=0; g<numTagGroups; g++) {
+            if (builders[g] != null) {
+                tagStrings[g] = builders[g].toString();
+            }
+            else {
+                tagStrings[g] = "";
+            }
+        }
+
+        return tagStrings;
 
     }
 
@@ -322,7 +430,7 @@ public class LogWriter {
         allTags.addAll(TagEvent.fromTurnId(mDb, turnId, typeNormal, tagGroupId));
         allTags.addAll(TagEvent.fromTurnId(mDb, turnId, typePersistent, tagGroupId));
 
-        String tagString = new String();
+        StringBuilder tagString = new StringBuilder();
 
         for (int t = 0; t < allTags.size(); t++) {
 
@@ -331,21 +439,28 @@ public class LogWriter {
             // Append a persistence marker if necessary
             if (t < allTags.size()-1) {
                 if (tag.getType() == typePersistent) {
-                    tagString += ("(p) " + tag.getName() + "; ");
+                    tagString
+                            .append("(p) ")
+                            .append(tag.getName())
+                            .append("; ");
                 } else {
-                    tagString += (tag.getName() + "; ");
+                    tagString
+                            .append(tag.getName())
+                            .append("; ");
                 }
             }
             else {
                 if (tag.getType() == typePersistent) {
-                    tagString += ("(p) " + tag.getName());
+                    tagString
+                            .append("(p) ")
+                            .append(tag.getName());
                 } else {
-                    tagString += (tag.getName());
+                    tagString.append(tag.getName());
                 }
             }
         }
 
-        return tagString;
+        return tagString.toString();
 
     }
 
@@ -375,5 +490,29 @@ public class LogWriter {
             mCsvWriter.writeNext(new String[mNumColumns]);
         }
     }
+
+    /**
+     * For interpreting the tagId CSV strings from the Turn records, it's useful to have a
+     * convenient and efficient mapping from each tagId to its parent tag group.  This map is
+     * assembled once, and points a Long tagId value to the TagGroup object in the class member list
+     */
+    private void makeHashMaps() {
+
+        mTagGroupHashMap = new HashMap<>();
+        mTagHashMap = new HashMap<>();
+
+        for (int g=0; g<mTagGroups.size(); g++) {
+            TagGroup group = mTagGroups.get(g);
+            List<Tag> tags = group.findChildTags(mDb, null);
+            for (int t=0; t<tags.size(); t++) {
+                Tag tag = tags.get(t);
+                mTagGroupHashMap.put(tag.getId(), g);
+                mTagHashMap.put(tag.getId(), tag);
+            }
+        }
+
+
+    }
+
 
 }

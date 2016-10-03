@@ -7,15 +7,11 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.BaseColumns;
-import android.support.v4.content.res.TypedArrayUtils;
 import android.util.Log;
 
 import com.brick.youscrew.utils.AppInstance;
 
-import java.nio.DoubleBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.lang.reflect.Constructor;
 
 
 /**
@@ -26,6 +22,9 @@ public abstract class DbEntity2 implements Parcelable {
     public static final String LOG_TAG = DbEntity2.class.getSimpleName();
 
     protected static final String KEY_ID = BaseColumns._ID;
+
+    // Keep a reference to the database such that it can be used in future to query for relatives
+    protected SQLiteDatabase mDb;
 
     protected long mId;
 
@@ -53,6 +52,8 @@ public abstract class DbEntity2 implements Parcelable {
     public DbEntity2 (Bundle bundle) {
 
         setKeys();
+
+        mDb = TurnDbHelper.getInstance(null).getWritableDatabase();
 
         mId = bundle.getLong(KEY_ID);
 
@@ -109,6 +110,9 @@ public abstract class DbEntity2 implements Parcelable {
     public abstract String getTableName();
 
     public synchronized void updateFromDb(SQLiteDatabase db) {
+
+        // Collect reference to the database and store it
+        mDb = db;
 
         Cursor c = db.query(
                 getTableName(),
@@ -341,7 +345,6 @@ public abstract class DbEntity2 implements Parcelable {
 
     }
 
-
     private void checkBundleContainsKey(String key) {
         if (!mData.containsKey(key)) {
             throw new FieldNotFoundException("Key does not exist in data bundle");
@@ -411,6 +414,37 @@ public abstract class DbEntity2 implements Parcelable {
 
     private class FieldNotFoundException extends RuntimeException {
         public FieldNotFoundException(String detailMessage) { super(detailMessage); }
+    }
+
+    protected static DbEntity2[] findAllInternal(SQLiteDatabase db, String className, String tableName)  {
+
+        Cursor cursor = db.query(tableName, new String[]{BaseColumns._ID}, null, null, null, null, null);
+        cursor.moveToFirst();
+
+        try {
+
+            Class<?> clazz = Class.forName(className);
+
+            Constructor<?> constructor = clazz.getConstructor(SQLiteDatabase.class, long.class);
+
+            DbEntity2[] objs = new DbEntity2[cursor.getCount()];
+
+            for (int c=0; c<cursor.getCount(); c++) {
+                long rowId = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
+                objs[c] = (DbEntity2) constructor.newInstance(db, rowId);
+                cursor.moveToNext();
+            }
+
+            cursor.close();
+
+            return objs;
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
 }
