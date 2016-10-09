@@ -103,17 +103,20 @@ public class LogWriter {
         else {
 
 //            // Start at the end (the earliest session) and move backward
+            int sessionIdx;
 
             for (int s = 0; s < numSessions; s++) {
 
+                sessionIdx = sessions.length-s-1;
+
                 // Write the session summary line
-                writePaddedLine( makeSessionStrings(sessions[sessions.length-s-1], s+1) );
+                writePaddedLine( makeSessionStrings(sessions[sessionIdx], s+1) );
 
                 // Write the turn column headings
                 mCsvWriter.writeNext(mTurnHeadings);
 
                 // Find all turn events for the current session
-                Turn[] turns = sessions[s].findTurns(mDb);
+                Turn[] turns = sessions[sessionIdx].findTurns(mDb);
                 for (Turn turn : turns) {
                     makeTurnStrings(turn);
                     mCsvWriter.writeNext(mTurnStrings);
